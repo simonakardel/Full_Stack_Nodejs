@@ -1,0 +1,16 @@
+anatomy of an URL
+
+
+1. protocol - https, http
+2. domain
+3. top-level domain (.com)
+3. endpoint
+4. path variable 
+5. query string (question mark, key, value)
+
+http://localhost/kickdinosaur:id?size=1200
+
+
+
+there are two different ways you can send data through get request - query string, path variable
+
