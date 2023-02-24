@@ -20,6 +20,8 @@ function getBirdById(id){
     return birdsArray.find(bird => bird.id === id);
 }
 
+let currentId = 10;
+
 // ALL BIRDS
 app.get('/birds', (req, res) => {
     res.send({data : birdsArray});
@@ -31,27 +33,22 @@ app.get('/birds/:id', (req, res) => {
 });
 
 // CREATE BIRD
-// CHECKS IF BIRD WITH GIVEN ID ALREADY EXISTS
 app.post('/birds', (req, res) => {
     const newBird = req.body;
-    const bird = getBirdById(newBird.id)
-    if(bird){
-        res.send({message: `Bird with id ${newBird.id} already exists, choose another id`})
-    } else { 
-        birdsArray.push(newBird);
-        res.send({ message: newBird });
-    }
+    newBird.id = ++currentId;
+    res.send({data: newBird})
     console.log(birdsArray)
 });
 
 
 // DELETE BIRD BY ID
 // CHECKS IF BIRD WITH GIVEN ID EXISTS FIRST
+// CONVENTION TO PUT ERROR MESSAGE FIRST
 app.delete('/birds/:id', (req, res) => {
     const id = parseInt(req.params.id)
     const bird = getBirdById(id);
     if(!bird){
-        res.send({message:`Bird with id ${id} not found` })
+        res.status(404).send({message:`Bird with id ${id} not found` })
     } else {
         res.send({message: `Bird deleted with id ${id}`})
         const index = birdsArray.findIndex(bird => bird.id === id)
@@ -67,7 +64,7 @@ app.put('/birds/:id', (req, res) => {
     const bird = getBirdById(id);
     const updatedBird = req.body;
     if(!bird){
-        res.send({message:`Bird with id ${id} not found` })
+        res.status(404).send({message:`Bird with id ${id} not found` })
     } else {
         const index = birdsArray.findIndex(bird => bird.id === id)
         birdsArray[index] = updatedBird;
