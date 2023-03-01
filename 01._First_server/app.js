@@ -50,6 +50,16 @@ app.post('/package', (req, res) => {
     res.send({message: req.body});
 });
 
+app.get("/time", (req, res) => {
+    res.send({time: new Date()});
+});
+
+const days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+date = new Date();
+console.log(days[date.getDay()])
+
+
 
 // Why are we sending json?
 // every server and language can interpret json
