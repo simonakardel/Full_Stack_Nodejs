@@ -1,0 +1,7 @@
+{
+    "tanks": [
+    { "name": "Leopard"},
+    { "name": "Tiger", "nationality": "German"},
+    { "name": "M1 Abrams", "version": "M1"}
+]
+} 
