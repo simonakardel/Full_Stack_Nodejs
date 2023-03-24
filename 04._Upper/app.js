@@ -1,32 +1,53 @@
 import express from "express";
 const app = express();
 
-// internally in node.js - path
 import path from "path";
 
-import jokes from "./util/jokes.js";
+app.use(express.static("public"));
 
-// needed for static files as style sheets, images and frontend 
-//javascript files that are served automaticaly and not manually as out html pages
-//app.use(express.static("public"));
+import getJoke from "./util/jokes.js";
+
+import renderPage from "./util/templateEngine.js";
+
+const frontpagePath = "./public/pages/frontpage/frontpage.html";
+const frontpagePage = renderPage(frontpagePath, { tabTitle: "Upper | Welcome"});
+
+const IRLQuestsPath = "./public/pages/IRLQuests/IRLQuests.html";
+const IRLQuestsPage = renderPage(IRLQuestsPath, {tabTitle: "Upper | Quests"});
+
+//Pages
+// without toString() it gives a buffer which is a byte stream
+//const frontpage = fs.readFileSync("./public/pages/frontpage/frontpage.html").toString();
+//const jokes = fs.readFileSync("./public/pages/jokes/jokes.html");
+//const IRLQuests = fs.readFileSync("./public/pages/IRLQuests/IRLQuests.html");
+
+
+// Constructed pages
+//const frontpagePage = navbar + frontpage + footer;
+//const jokesPage = navbar + jokes + footer;
+//const IRLQuestsPage = navbar + IRLQuests + footer;
 
 app.get("/", (req, res) => {
-    // resolve gives you the absolute file path
-    // !! no slash in the beginning
-    res.sendFile(path.resolve("public/pages/frontpage/frontpage.html"));
+    res.send(frontpagePage);
 });
 
 app.get("/IRLQuests", (req, res) => {
-    res.sendFile(path.resolve("public/pages/IRLQuests/IRLQuests.html"));
+    res.send(IRLQuestsPage);
 });
+
+app.get("/jokes", (req, res) => {
+   
+    const jokesPath = "./public/pages/jokes/jokes.html";
+    const jokesPage = renderPage(jokesPath, { tabTitle: "Upper | Jokes", cssLink: ""});
+    res.send(jokesPage);
+});
+
 
 
 const PORT = 8080;
 app.listen(PORT, (error) => {
-    {
-        if(error){
-            console.log(error);
-        }
+    if (error) {
+        console.log(error);
     }
-    console.log("Server running on port " + PORT);
+    console.log("Server running on port", PORT);
 });

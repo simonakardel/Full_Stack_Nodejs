@@ -41,6 +41,14 @@ app.get('/visitors', (req, res) => {
 });
 
 
+// proxy server - intermediary server, you can use to cache responses
+
+app.get('/proxy', (req, res) => {
+    fetch('http://google.com')
+    .then(response => response.text())
+    .then(result => res.send(result))
+});
+
 const PORT = 8080;
 app.listen(PORT, (error) => {
     if (error) {
