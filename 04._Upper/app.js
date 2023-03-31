@@ -4,28 +4,21 @@ const app = express();
 import path from "path";
 
 app.use(express.static("public"));
+app.use(express.urlencoded({extended: true}));
 
 import getJoke from "./util/jokes.js";
+import templateEngine from "./util/templateEngine.js";
 
 import renderPage from "./util/templateEngine.js";
 
-const frontpagePath = "./public/pages/frontpage/frontpage.html";
-const frontpagePage = renderPage(frontpagePath, { tabTitle: "Upper | Welcome"});
+const frontpagePath = templateEngine.readPage("./public/pages/frontpage/frontpage.html");
+const frontpagePage = templateEngine.renderPage(frontpagePath, { tabTitle: "Upper | Welcome"});
 
-const IRLQuestsPath = "./public/pages/IRLQuests/IRLQuests.html";
-const IRLQuestsPage = renderPage(IRLQuestsPath, {tabTitle: "Upper | Quests"});
+const IRLQuestsPath = templateEngine.readPage("./public/pages/IRLQuests/IRLQuests.html");
+const IRLQuestsPage = templateEngine.renderPage(IRLQuestsPath, {tabTitle: "Upper | Quests"});
 
-//Pages
-// without toString() it gives a buffer which is a byte stream
-//const frontpage = fs.readFileSync("./public/pages/frontpage/frontpage.html").toString();
-//const jokes = fs.readFileSync("./public/pages/jokes/jokes.html");
-//const IRLQuests = fs.readFileSync("./public/pages/IRLQuests/IRLQuests.html");
-
-
-// Constructed pages
-//const frontpagePage = navbar + frontpage + footer;
-//const jokesPage = navbar + jokes + footer;
-//const IRLQuestsPage = navbar + IRLQuests + footer;
+const contactPath = templateEngine.readPage("./public/pages/contact/contact.html");
+const contactPage = templateEngine.renderPage(contactPath, {tabTitle: "Contact"})
 
 app.get("/", (req, res) => {
     res.send(frontpagePage);
@@ -41,6 +34,15 @@ app.get("/jokes", (req, res) => {
     const jokesPage = renderPage(jokesPath, { tabTitle: "Upper | Jokes", cssLink: ""});
     res.send(jokesPage);
 });
+
+app.get("/contact", (req, res) => {
+    res.send(contactPage);
+});
+
+app.post("/api/contact", (req, res) => {
+    console.log(req.body);
+    res.redirect("/");
+})
 
 
 
